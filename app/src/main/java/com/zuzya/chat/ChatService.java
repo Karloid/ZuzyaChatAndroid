@@ -1,6 +1,7 @@
 package com.zuzya.chat;
 
 import android.app.Service;
+import android.content.Context;
 import android.content.Intent;
 import android.os.IBinder;
 import android.util.Log;
@@ -17,6 +18,7 @@ public class ChatService extends Service {
 	final String LOG_TAG = "Zuzya";
 	private static List<Message> messages;
 	private static List<ChatServiceListener> listeners;
+	private static Context baseContext;
 
 	public static List<Message> getMessages() {
 		if (messages == null) {
@@ -29,11 +31,14 @@ public class ChatService extends Service {
 	static void setStatus(ChatServiceStatus status) {
 		ChatService.status = status;
 		notifyOnStatusChanged();
+		messages.add(0, new Message(baseContext.getString(status.getStringId()), Message.Type.TECH_INFO));
+		notifyOnMessagesUpdatedListeners();
 	}
 
 	public void onCreate() {
 		super.onCreate();
 		Log.d(LOG_TAG, "onCreate");
+		baseContext = getBaseContext();
 	}
 
 	public int onStartCommand(Intent intent, int flags, int startId) {
@@ -53,7 +58,7 @@ public class ChatService extends Service {
 	}
 
 	void someTask() {
-		if (chatWebSocket != null && chatWebSocket.isOpen())  return;
+		if (chatWebSocket != null && chatWebSocket.isOpen()) return;
 		ChatService.setStatus(ChatServiceStatus.CONNECTING);
 		AsyncHttpClient.getDefaultInstance().websocket(Utils.getHostname(), null,
 				new AsyncHttpClient.WebSocketConnectCallback() {
@@ -113,6 +118,20 @@ public class ChatService extends Service {
 	}
 
 	public enum ChatServiceStatus {
-		CONNECTED, CONNECTING, DISCONNECTED
+		CONNECTED(R.string.connected), CONNECTING(R.string.connecting), DISCONNECTED(R.string.disconnected);
+
+		private int stringId;
+
+		ChatServiceStatus(int stringId) {
+			this.stringId = stringId;
+		}
+
+		public int getStringId() {
+			return stringId;
+		}
+
+		public void setStringId(int stringId) {
+			this.stringId = stringId;
+		}
 	}
 }

@@ -12,6 +12,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.Toast;
 
 
 public class ChatActivity extends Activity implements ChatServiceListener {
@@ -110,22 +111,16 @@ public class ChatActivity extends Activity implements ChatServiceListener {
 			@Override
 			public void run() {
 				if (status == null) return;
-				String newTitle = getString(R.string.app_name) + " - ";
-				switch (status) {
-					case CONNECTED:
-						newTitle += getString(R.string.connected);
-						break;
-					case CONNECTING:
-						newTitle += getString(R.string.connecting);
-						break;
-					case DISCONNECTED:
-						newTitle += getString(R.string.disconnected);
-						break;
-				}
+				String newStatus = getString(status.getStringId());
+				showToast(newStatus);
 				ActionBar actionBar = getActionBar();
 				if (actionBar != null)
-					actionBar.setTitle(newTitle);
+					actionBar.setTitle(getString(R.string.app_name) + " - " + newStatus);
 			}
 		});
+	}
+
+	private void showToast(String message) {
+		Toast.makeText(this, message, Toast.LENGTH_SHORT).show();
 	}
 }

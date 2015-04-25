@@ -10,6 +10,9 @@ import java.util.List;
 
 public class MessagesAdapter extends RecyclerView.Adapter<MessagesAdapter.ViewHolder> {
 
+	private static final int NORMAL_MESSAGE_VIEW = 0;
+	private static final int TECH_INFO_VIEW = 1;
+
 	private final List<Message> messages;
 
 	public MessagesAdapter(List<Message> messages) {
@@ -17,14 +20,23 @@ public class MessagesAdapter extends RecyclerView.Adapter<MessagesAdapter.ViewHo
 	}
 
 	@Override
-	public ViewHolder onCreateViewHolder(ViewGroup viewGroup, int i) {
-		View v = LayoutInflater.from(viewGroup.getContext()).inflate(R.layout.li_message, viewGroup, false);
+	public ViewHolder onCreateViewHolder(ViewGroup viewGroup, int viewType) {
+		View v;
+		if (viewType == TECH_INFO_VIEW)  //TODO enum
+			v = LayoutInflater.from(viewGroup.getContext()).inflate(R.layout.li_message_tech_info, viewGroup, false);
+		else
+			v = LayoutInflater.from(viewGroup.getContext()).inflate(R.layout.li_message, viewGroup, false);
 		return new ViewHolder(v);
 	}
 
 	@Override
 	public void onBindViewHolder(ViewHolder viewHolder, int i) {
 		viewHolder.textView.setText(messages.get(i).getText());
+	}
+
+	@Override
+	public int getItemViewType(int position) {
+		return messages.get(position).getType() == Message.Type.NORMAL_MESSAGE ? NORMAL_MESSAGE_VIEW : TECH_INFO_VIEW;
 	}
 
 	@Override
