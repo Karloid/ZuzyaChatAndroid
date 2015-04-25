@@ -4,34 +4,57 @@ import android.app.Activity;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.Button;
+import android.widget.EditText;
 import com.koushikdutta.async.http.AsyncHttpClient;
 import com.koushikdutta.async.http.WebSocket;
 
 
 public class ChatActivity extends Activity {
 
+	private EditText inputEditText;
+	private Button sendButton;
+
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_chat);
 
+		bindViews();
+
 		AsyncHttpClient.getDefaultInstance().websocket(Utils.getHostname(), null,
 				new AsyncHttpClient.WebSocketConnectCallback() {
 					@Override
-					public void onCompleted(Exception ex, WebSocket webSocket) {
+					public void onCompleted(Exception ex, final WebSocket webSocket) {
 						if (ex != null) {
 							ex.printStackTrace();
 							return;
 						}
-						webSocket.send("Lol");
 						webSocket.setStringCallback(new WebSocket.StringCallback() {
 							@Override
 							public void onStringAvailable(String s) {
 								System.out.println("new string: " + s);
 							}
 						});
+
+						sendButton.setOnClickListener(new View.OnClickListener() {
+							@Override
+							public void onClick(View v) {
+
+								String inputString = inputEditText.getText().toString();
+								if (!inputString.isEmpty())
+									webSocket.send(inputString);
+								inputEditText.setText("");
+							}
+						});
 					}
 				});
+	}
+
+	private void bindViews() {
+		inputEditText = (EditText) findViewById(R.id.chat_input_text);
+		sendButton = (Button) findViewById(R.id.chat_send_button);
 	}
 
 	@Override
