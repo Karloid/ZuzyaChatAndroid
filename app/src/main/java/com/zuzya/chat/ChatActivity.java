@@ -2,6 +2,7 @@ package com.zuzya.chat;
 
 import android.app.Activity;
 import android.os.Bundle;
+import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.Menu;
@@ -44,7 +45,7 @@ public class ChatActivity extends Activity {
 								runOnUiThread(new Runnable() {
 									@Override
 									public void run() {
-										messages.add(new Message(s));
+										messages.add(0,new Message(s));
 										recyclerView.getAdapter().notifyDataSetChanged();
 									}
 								});
@@ -72,11 +73,13 @@ public class ChatActivity extends Activity {
 
 		recyclerView = (RecyclerView) findViewById(R.id.chat_recycler_view);
 		LinearLayoutManager layoutManager = new LinearLayoutManager(this);
+		layoutManager.setReverseLayout(true);
 		layoutManager.setOrientation(LinearLayoutManager.VERTICAL);
 		recyclerView.setLayoutManager(layoutManager);
 
 		messages = new ArrayList<Message>();
 		RecyclerView.Adapter adapter = new MessagesAdapter(messages);
+		recyclerView.setItemAnimator( new DefaultItemAnimator());
 		recyclerView.setAdapter(adapter);
 	}
 
