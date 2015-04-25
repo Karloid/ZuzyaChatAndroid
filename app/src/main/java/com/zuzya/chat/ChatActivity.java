@@ -10,6 +10,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.Toast;
 import com.koushikdutta.async.http.AsyncHttpClient;
 import com.koushikdutta.async.http.WebSocket;
 
@@ -37,15 +38,17 @@ public class ChatActivity extends Activity {
 					public void onCompleted(Exception ex, final WebSocket webSocket) {
 						if (ex != null) {
 							ex.printStackTrace();
+							showToast("Exception: " + ex.getMessage());
 							return;
 						}
+						showToast("Connected!");
 						webSocket.setStringCallback(new WebSocket.StringCallback() {
 							@Override
 							public void onStringAvailable(final String s) {
 								runOnUiThread(new Runnable() {
 									@Override
 									public void run() {
-										messages.add(0,new Message(s));
+										messages.add(0, new Message(s));
 										recyclerView.getAdapter().notifyDataSetChanged();
 									}
 								});
@@ -67,6 +70,15 @@ public class ChatActivity extends Activity {
 				});
 	}
 
+	private void showToast(final String message) {
+		runOnUiThread(new Runnable() {
+			@Override
+			public void run() {
+				Toast.makeText(ChatActivity.this, message, Toast.LENGTH_LONG).show();
+			}
+		});
+	}
+
 	private void bindViews() {
 		inputEditText = (EditText) findViewById(R.id.chat_input_text);
 		sendButton = (Button) findViewById(R.id.chat_send_button);
@@ -79,7 +91,7 @@ public class ChatActivity extends Activity {
 
 		messages = new ArrayList<Message>();
 		RecyclerView.Adapter adapter = new MessagesAdapter(messages);
-		recyclerView.setItemAnimator( new DefaultItemAnimator());
+		recyclerView.setItemAnimator(new DefaultItemAnimator());
 		recyclerView.setAdapter(adapter);
 	}
 
