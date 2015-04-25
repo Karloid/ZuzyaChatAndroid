@@ -40,8 +40,15 @@ public class ChatActivity extends Activity {
 						}
 						webSocket.setStringCallback(new WebSocket.StringCallback() {
 							@Override
-							public void onStringAvailable(String s) {
-								System.out.println("new string: " + s);
+							public void onStringAvailable(final String s) {
+								runOnUiThread(new Runnable() {
+									@Override
+									public void run() {
+										messages.add(new Message(s));
+										recyclerView.getAdapter().notifyDataSetChanged();
+									}
+								});
+
 							}
 						});
 
@@ -69,7 +76,6 @@ public class ChatActivity extends Activity {
 		recyclerView.setLayoutManager(layoutManager);
 
 		messages = new ArrayList<Message>();
-		messages.add(new Message("Lol"));
 		RecyclerView.Adapter adapter = new MessagesAdapter(messages);
 		recyclerView.setAdapter(adapter);
 	}
