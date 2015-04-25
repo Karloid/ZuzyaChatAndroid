@@ -24,7 +24,7 @@ public class ChatActivity extends Activity implements ChatServiceListener {
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_chat);
-		startService(new Intent(this, ChatService.class));
+		startService();
 		bindViews();
 
 		sendButton.setOnClickListener(new View.OnClickListener() {
@@ -36,6 +36,10 @@ public class ChatActivity extends Activity implements ChatServiceListener {
 				inputEditText.setText("");
 			}
 		});
+	}
+
+	private void startService() {
+		startService(new Intent(this, ChatService.class));
 	}
 
 	@Override
@@ -76,8 +80,15 @@ public class ChatActivity extends Activity implements ChatServiceListener {
 		int id = item.getItemId();
 
 		//noinspection SimplifiableIfStatement
-		if (id == R.id.action_settings) {
-			return true;
+		switch (item.getItemId()) {
+			case R.id.menu_reconnect:
+				startService();
+				return true;
+			case R.id.menu_settings:
+				//TODO
+				return true;
+			default:
+				break;
 		}
 
 		return super.onOptionsItemSelected(item);
