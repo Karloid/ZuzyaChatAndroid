@@ -1,6 +1,8 @@
 package com.zuzya.chat;
 
+import android.app.ActionBar;
 import android.app.Activity;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
@@ -10,73 +12,42 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.Toast;
-import com.koushikdutta.async.http.AsyncHttpClient;
-import com.koushikdutta.async.http.WebSocket;
-
-import java.util.ArrayList;
-import java.util.List;
 
 
-public class ChatActivity extends Activity {
+public class ChatActivity extends Activity implements ChatServiceListener {
 
 	private EditText inputEditText;
 	private Button sendButton;
 	private RecyclerView recyclerView;
-	private List<Message> messages;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_chat);
-
+		startService(new Intent(this, ChatService.class));
 		bindViews();
 
-		AsyncHttpClient.getDefaultInstance().websocket(Utils.getHostname(), null,
-				new AsyncHttpClient.WebSocketConnectCallback() {
-					@Override
-					public void onCompleted(Exception ex, final WebSocket webSocket) {
-						if (ex != null) {
-							ex.printStackTrace();
-							showToast("Exception: " + ex.getMessage());
-							return;
-						}
-						showToast("Connected!");
-						webSocket.setStringCallback(new WebSocket.StringCallback() {
-							@Override
-							public void onStringAvailable(final String s) {
-								runOnUiThread(new Runnable() {
-									@Override
-									public void run() {
-										messages.add(0, new Message(s));
-										recyclerView.getAdapter().notifyDataSetChanged();
-									}
-								});
-
-							}
-						});
-
-						sendButton.setOnClickListener(new View.OnClickListener() {
-							@Override
-							public void onClick(View v) {
-
-								String inputString = inputEditText.getText().toString();
-								if (!inputString.isEmpty())
-									webSocket.send(inputString);
-								inputEditText.setText("");
-							}
-						});
-					}
-				});
-	}
-
-	private void showToast(final String message) {
-		runOnUiThread(new Runnable() {
+		sendButton.setOnClickListener(new View.OnClickListener() {
 			@Override
-			public void run() {
-				Toast.makeText(ChatActivity.this, message, Toast.LENGTH_LONG).show();
+			public void onClick(View v) {
+				String inputString = inputEditText.getText().toString();
+				if (!inputString.isEmpty())
+					ChatService.sendMessage(inputString);
+				inputEditText.setText("");
 			}
 		});
+	}
+
+	@Override
+	protected void onResume() {
+		super.onResume();
+		ChatService.addChatServiceListener(this);
+	}
+
+	@Override
+	protected void onPause() {
+		super.onPause();
+		ChatService.removeChatServiceListener(this);
 	}
 
 	private void bindViews() {
@@ -89,8 +60,7 @@ public class ChatActivity extends Activity {
 		layoutManager.setOrientation(LinearLayoutManager.VERTICAL);
 		recyclerView.setLayoutManager(layoutManager);
 
-		messages = new ArrayList<Message>();
-		RecyclerView.Adapter adapter = new MessagesAdapter(messages);
+		RecyclerView.Adapter adapter = new MessagesAdapter(ChatService.getMessages());
 		recyclerView.setItemAnimator(new DefaultItemAnimator());
 		recyclerView.setAdapter(adapter);
 	}
@@ -111,5 +81,40 @@ public class ChatActivity extends Activity {
 		}
 
 		return super.onOptionsItemSelected(item);
+	}
+
+	@Override
+	public void onMessagesUpdates() {
+		runOnUiThread(new Runnable() {
+			@Override
+			public void run() {
+				recyclerView.getAdapter().notifyDataSetChanged();
+			}
+		});
+	}
+
+	@Override
+	public void onStatusChanged(final ChatService.ChatServiceStatus status) {
+		runOnUiThread(new Runnable() {
+			@Override
+			public void run() {
+				if (status == null) return;
+				String newTitle = getString(R.string.app_name) + " - ";
+				switch (status) {
+					case CONNECTED:
+						newTitle += getString(R.string.connected);
+						break;
+					case CONNECTING:
+						newTitle += getString(R.string.connecting);
+						break;
+					case DISCONNECTED:
+						newTitle += getString(R.string.disconnected);
+						break;
+				}
+				ActionBar actionBar = getActionBar();
+				if (actionBar != null)
+					actionBar.setTitle(newTitle);
+			}
+		});
 	}
 }
