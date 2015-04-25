@@ -2,6 +2,8 @@ package com.zuzya.chat;
 
 import android.app.Activity;
 import android.os.Bundle;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -10,11 +12,16 @@ import android.widget.EditText;
 import com.koushikdutta.async.http.AsyncHttpClient;
 import com.koushikdutta.async.http.WebSocket;
 
+import java.util.ArrayList;
+import java.util.List;
+
 
 public class ChatActivity extends Activity {
 
 	private EditText inputEditText;
 	private Button sendButton;
+	private RecyclerView recyclerView;
+	private List<Message> messages;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -55,6 +62,16 @@ public class ChatActivity extends Activity {
 	private void bindViews() {
 		inputEditText = (EditText) findViewById(R.id.chat_input_text);
 		sendButton = (Button) findViewById(R.id.chat_send_button);
+
+		recyclerView = (RecyclerView) findViewById(R.id.chat_recycler_view);
+		LinearLayoutManager layoutManager = new LinearLayoutManager(this);
+		layoutManager.setOrientation(LinearLayoutManager.VERTICAL);
+		recyclerView.setLayoutManager(layoutManager);
+
+		messages = new ArrayList<Message>();
+		messages.add(new Message("Lol"));
+		RecyclerView.Adapter adapter = new MessagesAdapter(messages);
+		recyclerView.setAdapter(adapter);
 	}
 
 	@Override
