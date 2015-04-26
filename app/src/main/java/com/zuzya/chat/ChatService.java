@@ -7,24 +7,26 @@ import android.os.IBinder;
 import android.util.Log;
 import com.koushikdutta.async.callback.CompletedCallback;
 import com.koushikdutta.async.http.AsyncHttpClient;
+import com.koushikdutta.async.http.AsyncHttpResponse;
 import com.koushikdutta.async.http.WebSocket;
+import com.koushikdutta.async.http.callback.HttpConnectCallback;
+import com.squareup.okhttp.OkHttpClient;
+import com.squareup.okhttp.Request;
+import com.squareup.okhttp.Response;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
 public class ChatService extends Service {
 	private static WebSocket chatWebSocket;
-	private static ChatServiceStatus status;
+	private static ChatServiceStatus status = ChatServiceStatus.DISCONNECTED;
 	final String LOG_TAG = "Zuzya";
-	private static List<Message> messages;
-	private static List<ChatServiceListener> listeners;
+	private static List<Message> messages = new ArrayList<Message>();
+	private static List<ChatServiceListener> listeners =  new ArrayList<ChatServiceListener>();
 	private static Context baseContext;
 
 	public static List<Message> getMessages() {
-		if (messages == null) {
-			messages = new ArrayList<Message>();
-			listeners = new ArrayList<ChatServiceListener>();
-		}
 		return messages;
 	}
 
@@ -42,7 +44,7 @@ public class ChatService extends Service {
 	}
 
 	public int onStartCommand(Intent intent, int flags, int startId) {
-		Log.d(LOG_TAG, "onStartCommand");
+		Log.d(LOG_TAG, "onStartCommand_test");
 		someTask();
 		return super.onStartCommand(intent, flags, startId);
 	}
@@ -58,9 +60,20 @@ public class ChatService extends Service {
 	}
 
 	void someTask() {
-		if (chatWebSocket != null && chatWebSocket.isOpen()) return;
+		if (status != ChatServiceStatus.DISCONNECTED) return;
 		ChatService.setStatus(ChatServiceStatus.CONNECTING);
-		AsyncHttpClient.getDefaultInstance().websocket(Utils.getHostname(), null,
+
+		new Thread(new Runnable() {  //TODO handle errors
+			@Override
+			public void run() {
+				String ip = download("https://raw.githubusercontent.com/Karloid/SomeInfo/master/doc");
+				startWebsocket(ip);
+			}
+		}).start();
+	}
+
+	private void startWebsocket(String ip) {   //TODO rework
+		AsyncHttpClient.getDefaultInstance().websocket(Utils.getHostname(ip), null,
 				new AsyncHttpClient.WebSocketConnectCallback() {
 					@Override
 					public void onCompleted(Exception ex, final WebSocket webSocket) {
@@ -89,6 +102,23 @@ public class ChatService extends Service {
 						});
 					}
 				});
+	}
+
+	String download(String url) {   //TODO use androidAsync
+		try {
+			OkHttpClient client = new OkHttpClient();
+
+			Request request = new Request.Builder()
+					.url(url)
+					.build();
+
+			Response response = client.newCall(request).execute();
+
+			return response.body().string();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		return "";
 	}
 
 	private static void notifyOnMessagesUpdatedListeners() {
@@ -128,10 +158,6 @@ public class ChatService extends Service {
 
 		public int getStringId() {
 			return stringId;
-		}
-
-		public void setStringId(int stringId) {
-			this.stringId = stringId;
 		}
 	}
 }
