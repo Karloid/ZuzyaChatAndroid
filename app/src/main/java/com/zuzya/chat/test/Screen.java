@@ -1,18 +1,27 @@
 package com.zuzya.chat.test;
 
-import com.zuzya.chat.R;
+import android.view.View;
+
+import com.zuzya.chat.test.viewmodels.HaveViewModel;
+import com.zuzya.chat.test.viewmodels.ViewModel;
 
 /**
  * Created by Andrey on 5/7/2015.
  */
 public class Screen {
     private int layoutId;
+    private ViewModel viewModel;
 
-    public Screen() {
-        layoutId = R.layout.test_layout;
+    public Screen(int layoutId, ViewModel viewModel) {
+        this.layoutId = layoutId;
+        this.viewModel = viewModel;
     }
 
     public int getLayoutId() {
         return layoutId;
+    }
+
+    public void bind(View view) {
+        ((HaveViewModel) view).setViewModel(viewModel);
     }
 }

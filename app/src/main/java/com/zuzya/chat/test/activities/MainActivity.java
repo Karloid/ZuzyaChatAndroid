@@ -1,4 +1,4 @@
-package com.zuzya.chat.test;
+package com.zuzya.chat.test.activities;
 
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
@@ -7,9 +7,12 @@ import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
+import android.widget.FrameLayout;
 import android.widget.LinearLayout;
 
 import com.zuzya.chat.R;
+import com.zuzya.chat.test.Router;
+import com.zuzya.chat.test.Screen;
 
 import java.util.zip.Inflater;
 
@@ -17,7 +20,7 @@ import rx.functions.Action1;
 
 public class MainActivity extends AppCompatActivity {
 
-    private LinearLayout container;
+    private FrameLayout container;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -25,7 +28,7 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
         setupToolbarAndDrawer();
-        container = (LinearLayout) findViewById(R.id.main_container);
+        container = (FrameLayout) findViewById(R.id.main_container);
         setupRX();
     }
 
@@ -37,35 +40,36 @@ public class MainActivity extends AppCompatActivity {
                 runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
-                        final View oldChild = container.getChildAt(1);
-                        if (oldChild != null) {
-
-                            oldChild.animate()     //TODO rework
-                                    .translationY(1000)
-                                    .alpha(0.0f)
-                                    .setListener(new AnimatorListenerAdapter() {
-                                        @Override
-                                        public void onAnimationEnd(Animator animation) {
-                                            super.onAnimationEnd(animation);
-                                            container.removeView(oldChild);
-                                            if (screen == null) return;
-                                            int newLayoutId = screen.getLayoutId();
-                                            View newChild = getLayoutInflater().inflate(newLayoutId, container);
-                                            //TODO bind ViewModel
-                                        }
-                                    });
-                        } else {  //TODO rework
-                            if (screen == null) return;
-                            int newLayoutId = screen.getLayoutId();
-                            View newChild = getLayoutInflater().inflate(newLayoutId, container);
-                            //TODO bind ViewModel
-                        }
-
+                        handleNewScreen(screen);
                     }
                 });
             }
-
         });
+    }
+
+    private void handleNewScreen(final Screen screen) {
+        final View oldChild = container.getChildAt(0);
+        if (oldChild != null) {
+
+            oldChild.animate()     //TODO rework
+                    .translationY(1000)
+                    .alpha(0.0f)
+                    .setListener(new AnimatorListenerAdapter() {
+                        @Override
+                        public void onAnimationEnd(Animator animation) {
+                            super.onAnimationEnd(animation);
+                            container.removeView(oldChild);
+                        }
+                    });
+        } else {  //TODO rework
+
+        }
+        if (screen == null) return;
+        int newLayoutId = screen.getLayoutId();
+        View newView = getLayoutInflater().inflate(newLayoutId, container, false);
+        container.addView(newView);
+        screen.bind(newView);
+        //TODO bind ViewModel
     }
 
     private void setupToolbarAndDrawer() {

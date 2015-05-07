@@ -8,12 +8,10 @@
 
     <!-- Your normal content view -->
     <LinearLayout
-        android:id = "@+id/main_container"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:animateLayoutChanges="true"
-        android:orientation="vertical"
-        >
+        android:orientation="vertical">
 
         <!-- We use a Toolbar so that our drawer can be displayed
              in front of the action bar -->
@@ -25,6 +23,12 @@
             android:minHeight="?attr/actionBarSize"
             app:theme="@style/ToolBarStyle" />
         <!-- The rest of your content view -->
+        <FrameLayout
+            android:id="@+id/main_container"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            />
 
     </LinearLayout>
 
