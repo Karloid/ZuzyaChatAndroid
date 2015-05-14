@@ -67,6 +67,7 @@ public class MainActivity extends AppCompatActivity {
         if (screen == null) return;
         int newLayoutId = screen.getLayoutId();
         View newView = getLayoutInflater().inflate(newLayoutId, container, false);
+        screen.bind(newView);
         container.addView(newView);
         newView.setAlpha(0);
         newView.setTranslationX(-300);
@@ -79,7 +80,6 @@ public class MainActivity extends AppCompatActivity {
                 .scaleX(1)
                 .scaleY(1)
                 .start();
-        screen.bind(newView);
         //TODO bind ViewModel
     }
 

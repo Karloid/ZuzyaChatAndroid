@@ -1,17 +1,16 @@
 package com.zuzya.chat.test.views;
 
-import android.app.Activity;
 import android.content.Context;
 import android.util.AttributeSet;
 import android.widget.TextView;
 
-import com.zuzya.chat.test.viewmodels.HaveViewModel;
+import com.zuzya.chat.test.viewmodels.HasViewModel;
 import com.zuzya.chat.test.viewmodels.TestViewModel;
 import com.zuzya.chat.test.viewmodels.ViewModel;
 
 import rx.functions.Action1;
 
-public class TestTextView extends TextView implements HaveViewModel {
+public class TestTextView extends TextView implements HasViewModel {
 
     private TestViewModel viewModel;
 

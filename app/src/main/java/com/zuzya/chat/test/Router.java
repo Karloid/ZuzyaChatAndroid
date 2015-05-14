@@ -3,6 +3,7 @@ package com.zuzya.chat.test;
 import android.content.Context;
 
 import com.zuzya.chat.R;
+import com.zuzya.chat.test.viewmodels.ChatViewModel;
 import com.zuzya.chat.test.viewmodels.TestViewModel;
 
 import rx.Observable;
@@ -21,14 +22,15 @@ public class Router {
         Thread thread = new Thread(new Runnable() {
             @Override
             public void run() {
-                while (true) {
-                    currentScreen.onNext(new Screen(R.layout.test_layout, new TestViewModel()));
+                for (int i = 0; i < 4; i++){
+                    currentScreen.onNext(new Screen(R.layout.v_test, new TestViewModel()));
                     try {
                         Thread.sleep(500);
                     } catch (InterruptedException e) {
                         e.printStackTrace();
                     }
                 }
+                currentScreen.onNext(new Screen(R.layout.v_chat, new ChatViewModel()));
             }
         });
         thread.start();

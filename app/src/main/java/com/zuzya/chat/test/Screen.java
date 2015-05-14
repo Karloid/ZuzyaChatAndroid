@@ -2,7 +2,7 @@ package com.zuzya.chat.test;
 
 import android.view.View;
 
-import com.zuzya.chat.test.viewmodels.HaveViewModel;
+import com.zuzya.chat.test.viewmodels.HasViewModel;
 import com.zuzya.chat.test.viewmodels.ViewModel;
 
 /**
@@ -22,6 +22,6 @@ public class Screen {
     }
 
     public void bind(View view) {
-        ((HaveViewModel) view).setViewModel(viewModel);
+        ((HasViewModel) view).setViewModel(viewModel);
     }
 }
