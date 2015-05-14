@@ -48,26 +48,37 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void handleNewScreen(final Screen screen) {
-        final View oldChild = container.getChildAt(0);
-        if (oldChild != null) {
-
-            oldChild.animate()     //TODO rework
-                    .translationY(1000)
-                    .alpha(0.0f)
-                    .setListener(new AnimatorListenerAdapter() {
-                        @Override
-                        public void onAnimationEnd(Animator animation) {
-                            super.onAnimationEnd(animation);
-                            container.removeView(oldChild);
-                        }
-                    });
-        } else {  //TODO rework
-
+        int childcount = container.getChildCount();
+        for (int i = 0; i < childcount; i++) {
+            final View oldChild = container.getChildAt(i);
+            if (oldChild != null) {
+                oldChild.animate()     //TODO rework
+                        .translationY(1000)
+                        .alpha(0.0f)
+                        .setListener(new AnimatorListenerAdapter() {
+                            @Override
+                            public void onAnimationEnd(Animator animation) {
+                                super.onAnimationEnd(animation);
+                                container.removeView(oldChild);
+                            }
+                        });
+            }
         }
         if (screen == null) return;
         int newLayoutId = screen.getLayoutId();
         View newView = getLayoutInflater().inflate(newLayoutId, container, false);
         container.addView(newView);
+        newView.setAlpha(0);
+        newView.setTranslationX(-300);
+        newView.setTranslationY(-300);
+        newView.setScaleX(0.1f);
+        newView.setScaleY(0.1f);
+        newView.animate().alpha(1)
+                .translationX(0)
+                .translationY(0)
+                .scaleX(1)
+                .scaleY(1)
+                .start();
         screen.bind(newView);
         //TODO bind ViewModel
     }
