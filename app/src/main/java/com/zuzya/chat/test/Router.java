@@ -24,7 +24,7 @@ public class Router {
                 while (true) {
                     currentScreen.onNext(new Screen(R.layout.test_layout, new TestViewModel()));
                     try {
-                        Thread.sleep(1000);
+                        Thread.sleep(500);
                     } catch (InterruptedException e) {
                         e.printStackTrace();
                     }

@@ -21,7 +21,7 @@ public class TestViewModel implements ViewModel {
         Thread thread = new Thread(new Runnable() {
             @Override
             public void run() {
-                while (true) {
+                for (int i = 0; i <= 5; i++) {
                     text.onNext(text.getValue() + ".");
                     try {
                         Thread.sleep(100);
