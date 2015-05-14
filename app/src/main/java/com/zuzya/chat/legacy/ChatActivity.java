@@ -1,4 +1,4 @@
-package com.zuzya.chat;
+package com.zuzya.chat.legacy;
 
 import android.app.ActionBar;
 import android.app.Activity;
@@ -13,6 +13,8 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
+
+import com.zuzya.chat.R;
 
 
 public class ChatActivity extends Activity implements ChatServiceListener {

@@ -1,4 +1,4 @@
-package com.zuzya.chat;
+package com.zuzya.chat.legacy;
 
 import android.app.Service;
 import android.content.Context;
@@ -7,12 +7,11 @@ import android.os.IBinder;
 import android.util.Log;
 import com.koushikdutta.async.callback.CompletedCallback;
 import com.koushikdutta.async.http.AsyncHttpClient;
-import com.koushikdutta.async.http.AsyncHttpResponse;
 import com.koushikdutta.async.http.WebSocket;
-import com.koushikdutta.async.http.callback.HttpConnectCallback;
 import com.squareup.okhttp.OkHttpClient;
 import com.squareup.okhttp.Request;
 import com.squareup.okhttp.Response;
+import com.zuzya.chat.R;
 
 import java.io.IOException;
 import java.util.ArrayList;
