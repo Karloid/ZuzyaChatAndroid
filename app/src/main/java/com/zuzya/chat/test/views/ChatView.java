@@ -16,19 +16,25 @@ import android.widget.Toast;
 import com.zuzya.chat.R;
 import com.zuzya.chat.legacy.ChatService;
 import com.zuzya.chat.legacy.ChatServiceListener;
+import com.zuzya.chat.legacy.Message;
 import com.zuzya.chat.legacy.MessagesAdapter;
 import com.zuzya.chat.test.viewmodels.ChatViewModel;
 import com.zuzya.chat.test.viewmodels.HasViewModel;
 import com.zuzya.chat.test.viewmodels.ViewModel;
 
-import rx.functions.Action1;
+import java.util.List;
 
-public class ChatView extends RelativeLayout implements HasViewModel, ChatServiceListener {
+import rx.Scheduler;
+import rx.functions.Action1;
+import rx.schedulers.Schedulers;
+
+public class ChatView extends RelativeLayout implements HasViewModel {
     private ChatViewModel viewModel;
 
     private EditText inputEditText;
     private Button sendButton;
     private RecyclerView recyclerView;
+    private MessagesAdapter messagesAdapter;
 
     public ChatView(Context context) {
         super(context);
@@ -49,8 +55,6 @@ public class ChatView extends RelativeLayout implements HasViewModel, ChatServic
     @Override
     protected void onFinishInflate() {
         super.onFinishInflate();
-        startService(); //TODO extract to view model
-        ChatService.addChatServiceListener(this);
         bindViews();
 
         sendButton.setOnClickListener(new View.OnClickListener() {
@@ -64,10 +68,6 @@ public class ChatView extends RelativeLayout implements HasViewModel, ChatServic
         });
     }
 
-    private void startService() {
-        getContext().startService(new Intent(getContext(), ChatService.class));
-    }
-
     private void bindViews() {
         inputEditText = (EditText) findViewById(R.id.chat_input_text);
         sendButton = (Button) findViewById(R.id.chat_send_button);
@@ -78,7 +78,8 @@ public class ChatView extends RelativeLayout implements HasViewModel, ChatServic
         layoutManager.setOrientation(LinearLayoutManager.VERTICAL);
         recyclerView.setLayoutManager(layoutManager);
 
-        RecyclerView.Adapter adapter = new MessagesAdapter(ChatService.getMessages());
+        messagesAdapter = new MessagesAdapter();
+        RecyclerView.Adapter adapter = messagesAdapter;
         recyclerView.setItemAnimator(new DefaultItemAnimator());
         recyclerView.setAdapter(adapter);
     }
@@ -90,31 +91,28 @@ public class ChatView extends RelativeLayout implements HasViewModel, ChatServic
         subscribeViewModel();
     }
 
-    private void subscribeViewModel() {   //TODO memory management
-        //TODO
-    }
-
-    @Override
-    public void onMessagesUpdates() {     //TODO move to view model
-        post(new Runnable() {
+    private void subscribeViewModel() {
+        viewModel.getMessages().subscribe(new Action1<List<Message>>() {
             @Override
-            public void run() {
-                recyclerView.getAdapter().notifyDataSetChanged();
+            public void call(final List<Message> messages) {
+                post(new Runnable() {
+                    @Override
+                    public void run() {
+                        messagesAdapter.setMessages(messages);
+                    }
+                });
             }
         });
-    }
 
-    @Override
-    public void onStatusChanged(final ChatService.ChatServiceStatus status) { //TODO move to view model
-        post(new Runnable() {
+        viewModel.getStatus().subscribe(new Action1<String>() {
             @Override
-            public void run() {
-                if (status == null) return;
-                String newStatus = getContext().getString(status.getStringId());
-                showToast(newStatus);
-                /*ActionBar actionBar = getActionBar();  //TODO move to view model
-                if (actionBar != null)
-                    actionBar.setTitle(getString(R.string.app_name) + " - " + newStatus);*/
+            public void call(final String s) {
+                post(new Runnable() {
+                    @Override
+                    public void run() {
+                        showToast(s);
+                    }
+                });
             }
         });
     }

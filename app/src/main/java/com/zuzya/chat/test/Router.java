@@ -30,7 +30,7 @@ public class Router {
                         e.printStackTrace();
                     }
                 }
-                currentScreen.onNext(new Screen(R.layout.v_chat, new ChatViewModel()));
+                currentScreen.onNext(new Screen(R.layout.v_chat, new ChatViewModel(context)));
             }
         });
         thread.start();

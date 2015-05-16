@@ -10,49 +10,56 @@ import com.zuzya.chat.R;
 
 import java.util.List;
 
+import rx.Observable;
+
 public class MessagesAdapter extends RecyclerView.Adapter<MessagesAdapter.ViewHolder> {
 
-	private static final int NORMAL_MESSAGE_VIEW = 0;
-	private static final int TECH_INFO_VIEW = 1;
+    private static final int NORMAL_MESSAGE_VIEW = 0;
+    private static final int TECH_INFO_VIEW = 1;
 
-	private final List<Message> messages;
+    private List<Message> messages;
 
-	public MessagesAdapter(List<Message> messages) {
-		this.messages = messages;
-	}
+    public MessagesAdapter() {
+    }
 
-	@Override
-	public ViewHolder onCreateViewHolder(ViewGroup viewGroup, int viewType) {
-		View v;
-		if (viewType == TECH_INFO_VIEW)  //TODO enum
-			v = LayoutInflater.from(viewGroup.getContext()).inflate(R.layout.li_message_tech_info, viewGroup, false);
-		else
-			v = LayoutInflater.from(viewGroup.getContext()).inflate(R.layout.li_message, viewGroup, false);
-		return new ViewHolder(v);
-	}
+    @Override
+    public ViewHolder onCreateViewHolder(ViewGroup viewGroup, int viewType) {
+        View v;
+        if (viewType == TECH_INFO_VIEW)  //TODO enum
+            v = LayoutInflater.from(viewGroup.getContext()).inflate(R.layout.li_message_tech_info, viewGroup, false);
+        else
+            v = LayoutInflater.from(viewGroup.getContext()).inflate(R.layout.li_message, viewGroup, false);
+        return new ViewHolder(v);
+    }
 
-	@Override
-	public void onBindViewHolder(ViewHolder viewHolder, int i) {
-		viewHolder.textView.setText(messages.get(i).getText());
-	}
+    @Override
+    public void onBindViewHolder(ViewHolder viewHolder, int i) {
+        viewHolder.textView.setText(messages.get(i).getText());
+    }
 
-	@Override
-	public int getItemViewType(int position) {
-		return messages.get(position).getType() == Message.Type.NORMAL_MESSAGE ? NORMAL_MESSAGE_VIEW : TECH_INFO_VIEW;
-	}
+    @Override
+    public int getItemViewType(int position) {
+        return messages.get(position).getType() == Message.Type.NORMAL_MESSAGE ? NORMAL_MESSAGE_VIEW : TECH_INFO_VIEW;
+    }
 
-	@Override
-	public int getItemCount() {
-		return messages.size();
-	}
+    @Override
+    public int getItemCount() {
+        if (messages == null) return 0;
+        return messages.size();
+    }
 
-	public class ViewHolder extends RecyclerView.ViewHolder {
+    public void setMessages(List<Message> messages) {
+        this.messages = messages;
+        notifyDataSetChanged();
+    }
 
-		public final TextView textView;
+    public class ViewHolder extends RecyclerView.ViewHolder {
 
-		public ViewHolder(View v) {
-			super(v);
-			textView = (TextView) v.findViewById(android.R.id.text1);
-		}
-	}
+        public final TextView textView;
+
+        public ViewHolder(View v) {
+            super(v);
+            textView = (TextView) v.findViewById(android.R.id.text1);
+        }
+    }
 }

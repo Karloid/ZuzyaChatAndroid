@@ -146,6 +146,10 @@ public class ChatService extends Service {
 		listeners.remove(listener);
 	}
 
+	public static ChatServiceStatus getStatus() {
+		return status;
+	}
+
 	public enum ChatServiceStatus {
 		CONNECTED(R.string.connected), CONNECTING(R.string.connecting), DISCONNECTED(R.string.disconnected);
 

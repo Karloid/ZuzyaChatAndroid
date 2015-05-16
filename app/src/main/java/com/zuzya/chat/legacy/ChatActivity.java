@@ -67,7 +67,7 @@ public class ChatActivity extends Activity implements ChatServiceListener {
 		layoutManager.setOrientation(LinearLayoutManager.VERTICAL);
 		recyclerView.setLayoutManager(layoutManager);
 
-		RecyclerView.Adapter adapter = new MessagesAdapter(ChatService.getMessages());
+		RecyclerView.Adapter adapter = new MessagesAdapter();
 		recyclerView.setItemAnimator(new DefaultItemAnimator());
 		recyclerView.setAdapter(adapter);
 	}
