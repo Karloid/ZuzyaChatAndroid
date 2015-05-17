@@ -13,7 +13,7 @@ import java.util.List;
 import rx.Observable;
 import rx.subjects.BehaviorSubject;
 
-public class ChatViewModel implements ViewModel, ChatServiceListener {
+public class ChatViewModel extends BaseViewModel implements ChatServiceListener {
     private final BehaviorSubject<String> status;
     private final BehaviorSubject<List<Message>> messages;
     private Context context;

@@ -8,19 +8,19 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.widget.FrameLayout;
-import android.widget.LinearLayout;
 
 import com.zuzya.chat.R;
 import com.zuzya.chat.test.Router;
 import com.zuzya.chat.test.Screen;
-
-import java.util.zip.Inflater;
 
 import rx.functions.Action1;
 
 public class MainActivity extends AppCompatActivity {
 
     private FrameLayout container;
+    private Router router;
+
+    private Screen currentScreen;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -32,8 +32,22 @@ public class MainActivity extends AppCompatActivity {
         setupRX();
     }
 
+    @Override
+    protected void onResume() {
+        super.onResume();
+        if (currentScreen != null)
+            currentScreen.getViewModel().onResume();
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        if (currentScreen != null)
+            currentScreen.getViewModel().onPause();
+    }
+
     private void setupRX() {
-        Router router = Router.getSingleton(this.getApplicationContext());
+        router = Router.getSingleton(this.getApplicationContext());
         router.getCurrentScreen().subscribe(new Action1<Screen>() {
             @Override
             public void call(final Screen screen) {
@@ -48,6 +62,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void handleNewScreen(final Screen screen) {
+        this.currentScreen = screen;
         int childcount = container.getChildCount();
         for (int i = 0; i < childcount; i++) {
             final View oldChild = container.getChildAt(i);

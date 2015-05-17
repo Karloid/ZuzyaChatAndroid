@@ -7,7 +7,7 @@ import java.util.Random;
 import rx.Observable;
 import rx.subjects.BehaviorSubject;
 
-public class TestViewModel implements ViewModel {
+public class TestViewModel extends BaseViewModel {
     private BehaviorSubject<String> text;
     private BehaviorSubject<Integer> color;
 

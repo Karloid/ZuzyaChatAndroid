@@ -24,4 +24,8 @@ public class Screen {
     public void bind(View view) {
         ((HasViewModel) view).setViewModel(viewModel);
     }
+
+    public ViewModel getViewModel() {
+        return viewModel;
+    }
 }
