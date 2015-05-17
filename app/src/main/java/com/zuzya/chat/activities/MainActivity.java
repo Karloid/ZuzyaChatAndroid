@@ -12,8 +12,11 @@ import android.widget.FrameLayout;
 import com.zuzya.chat.R;
 import com.zuzya.chat.meta.Router;
 import com.zuzya.chat.meta.Screen;
+import com.zuzya.chat.test.viewmodels.ActionBarProviderViewModel;
+import com.zuzya.chat.viewmodels.ViewModel;
 
 import rx.functions.Action1;
+import rx.subjects.BehaviorSubject;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -21,6 +24,7 @@ public class MainActivity extends AppCompatActivity {
     private Router router;
 
     private Screen currentScreen;
+    private BehaviorSubject<Object> newScreenSignal;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -47,10 +51,22 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void setupRX() {
+        newScreenSignal = BehaviorSubject.create();
         router = Router.getSingleton(this.getApplicationContext());
         router.getCurrentScreen().subscribe(new Action1<Screen>() {
             @Override
             public void call(final Screen screen) {
+                newScreenSignal.onNext("");
+                ViewModel viewModel = screen.getViewModel();
+                if (viewModel instanceof ActionBarProviderViewModel) {
+                    ActionBarProviderViewModel abvm = (ActionBarProviderViewModel) viewModel;
+                    abvm.getActionBarTitle().takeUntil(newScreenSignal.skip(1)).subscribe(new RunOnUiAction<String>() {
+                                                                                      @Override
+                                                                                      protected void runUI(String t) {
+                                                                                          getSupportActionBar().setTitle(t);
+                                                                                      }
+                                                                                  });
+                }
                 runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
@@ -59,6 +75,8 @@ public class MainActivity extends AppCompatActivity {
                 });
             }
         });
+
+
     }
 
     private void handleNewScreen(final Screen screen) {
@@ -95,7 +113,6 @@ public class MainActivity extends AppCompatActivity {
                 .scaleX(1)
                 .scaleY(1)
                 .start();
-        //TODO bind ViewModel
     }
 
     private void setupToolbarAndDrawer() {
@@ -107,5 +124,20 @@ public class MainActivity extends AppCompatActivity {
         // on KitKat.
         DrawerLayout drawerLayout = (DrawerLayout) findViewById(R.id.my_drawer_layout);
         drawerLayout.setStatusBarBackgroundColor(getResources().getColor(R.color.primary_dark));
+    }
+
+    private abstract class RunOnUiAction<T> implements Action1<T> {
+
+        @Override
+        public void call(final T t) {
+            runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    runUI(t);
+                }
+            });
+        }
+
+        protected abstract void runUI(T t);
     }
 }

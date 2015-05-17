@@ -112,6 +112,7 @@ public class ChatView extends RelativeLayout implements HasViewModel {
         });
     }
 
+    //TODO move to activity
     private void showToast(String message) {
         Toast.makeText(getContext(), message, Toast.LENGTH_SHORT).show();
     }
