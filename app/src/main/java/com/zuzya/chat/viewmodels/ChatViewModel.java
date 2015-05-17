@@ -1,11 +1,11 @@
-package com.zuzya.chat.test.viewmodels;
+package com.zuzya.chat.viewmodels;
 
 import android.content.Context;
 import android.content.Intent;
 
-import com.zuzya.chat.legacy.ChatService;
-import com.zuzya.chat.legacy.ChatServiceListener;
-import com.zuzya.chat.legacy.Message;
+import com.zuzya.chat.services.ChatService;
+import com.zuzya.chat.services.ChatServiceListener;
+import com.zuzya.chat.models.Message;
 
 import java.util.ArrayList;
 import java.util.List;

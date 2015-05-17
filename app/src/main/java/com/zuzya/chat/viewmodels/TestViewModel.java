@@ -1,4 +1,4 @@
-package com.zuzya.chat.test.viewmodels;
+package com.zuzya.chat.viewmodels;
 
 import android.graphics.Color;
 

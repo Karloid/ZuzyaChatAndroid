@@ -1,4 +1,4 @@
-package com.zuzya.chat.test.viewmodels;
+package com.zuzya.chat.viewmodels;
 
 /**
  * Created by Andrey on 5/8/2015.

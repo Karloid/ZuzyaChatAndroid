@@ -1,4 +1,4 @@
-package com.zuzya.chat.legacy;
+package com.zuzya.chat.adapters;
 
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -7,10 +7,9 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.zuzya.chat.R;
+import com.zuzya.chat.models.Message;
 
 import java.util.List;
-
-import rx.Observable;
 
 public class MessagesAdapter extends RecyclerView.Adapter<MessagesAdapter.ViewHolder> {
 

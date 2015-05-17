@@ -1,12 +1,12 @@
-package com.zuzya.chat.test.views;
+package com.zuzya.chat.views;
 
 import android.content.Context;
 import android.util.AttributeSet;
 import android.widget.TextView;
 
-import com.zuzya.chat.test.viewmodels.HasViewModel;
-import com.zuzya.chat.test.viewmodels.TestViewModel;
-import com.zuzya.chat.test.viewmodels.ViewModel;
+import com.zuzya.chat.viewmodels.HasViewModel;
+import com.zuzya.chat.viewmodels.TestViewModel;
+import com.zuzya.chat.viewmodels.ViewModel;
 
 import rx.functions.Action1;
 

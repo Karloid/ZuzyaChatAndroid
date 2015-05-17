@@ -1,4 +1,4 @@
-package com.zuzya.chat.test.activities;
+package com.zuzya.chat.activities;
 
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
@@ -10,8 +10,8 @@ import android.view.View;
 import android.widget.FrameLayout;
 
 import com.zuzya.chat.R;
-import com.zuzya.chat.test.Router;
-import com.zuzya.chat.test.Screen;
+import com.zuzya.chat.meta.Router;
+import com.zuzya.chat.meta.Screen;
 
 import rx.functions.Action1;
 

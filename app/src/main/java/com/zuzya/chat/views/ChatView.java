@@ -1,8 +1,6 @@
-package com.zuzya.chat.test.views;
+package com.zuzya.chat.views;
 
-import android.app.ActionBar;
 import android.content.Context;
-import android.content.Intent;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -14,19 +12,16 @@ import android.widget.RelativeLayout;
 import android.widget.Toast;
 
 import com.zuzya.chat.R;
-import com.zuzya.chat.legacy.ChatService;
-import com.zuzya.chat.legacy.ChatServiceListener;
-import com.zuzya.chat.legacy.Message;
-import com.zuzya.chat.legacy.MessagesAdapter;
-import com.zuzya.chat.test.viewmodels.ChatViewModel;
-import com.zuzya.chat.test.viewmodels.HasViewModel;
-import com.zuzya.chat.test.viewmodels.ViewModel;
+import com.zuzya.chat.services.ChatService;
+import com.zuzya.chat.models.Message;
+import com.zuzya.chat.adapters.MessagesAdapter;
+import com.zuzya.chat.viewmodels.ChatViewModel;
+import com.zuzya.chat.viewmodels.HasViewModel;
+import com.zuzya.chat.viewmodels.ViewModel;
 
 import java.util.List;
 
-import rx.Scheduler;
 import rx.functions.Action1;
-import rx.schedulers.Schedulers;
 
 public class ChatView extends RelativeLayout implements HasViewModel {
     private ChatViewModel viewModel;

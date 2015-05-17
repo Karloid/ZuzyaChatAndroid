@@ -1,9 +1,9 @@
-package com.zuzya.chat.test;
+package com.zuzya.chat.meta;
 
 import android.view.View;
 
-import com.zuzya.chat.test.viewmodels.HasViewModel;
-import com.zuzya.chat.test.viewmodels.ViewModel;
+import com.zuzya.chat.viewmodels.HasViewModel;
+import com.zuzya.chat.viewmodels.ViewModel;
 
 /**
  * Created by Andrey on 5/7/2015.

@@ -1,4 +1,4 @@
-package com.zuzya.chat.legacy;
+package com.zuzya.chat.services;
 
 public interface ChatServiceListener {
 	void onMessagesUpdates();

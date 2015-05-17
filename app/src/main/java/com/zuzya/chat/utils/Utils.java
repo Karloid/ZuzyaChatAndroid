@@ -1,4 +1,4 @@
-package com.zuzya.chat.legacy;
+package com.zuzya.chat.utils;
 
 public class Utils {
 	public static String getHostname(String ip) {

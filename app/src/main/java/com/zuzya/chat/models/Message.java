@@ -1,4 +1,4 @@
-package com.zuzya.chat.legacy;
+package com.zuzya.chat.models;
 
 public class Message {
 	private final String text;

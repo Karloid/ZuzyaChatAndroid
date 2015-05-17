@@ -1,4 +1,4 @@
-package com.zuzya.chat.legacy;
+package com.zuzya.chat.services;
 
 import android.app.Service;
 import android.content.Context;
@@ -12,6 +12,8 @@ import com.squareup.okhttp.OkHttpClient;
 import com.squareup.okhttp.Request;
 import com.squareup.okhttp.Response;
 import com.zuzya.chat.R;
+import com.zuzya.chat.utils.Utils;
+import com.zuzya.chat.models.Message;
 
 import java.io.IOException;
 import java.util.ArrayList;

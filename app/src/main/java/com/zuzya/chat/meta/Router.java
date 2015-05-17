@@ -1,10 +1,10 @@
-package com.zuzya.chat.test;
+package com.zuzya.chat.meta;
 
 import android.content.Context;
 
 import com.zuzya.chat.R;
-import com.zuzya.chat.test.viewmodels.ChatViewModel;
-import com.zuzya.chat.test.viewmodels.TestViewModel;
+import com.zuzya.chat.viewmodels.ChatViewModel;
+import com.zuzya.chat.viewmodels.TestViewModel;
 
 import rx.Observable;
 import rx.subjects.BehaviorSubject;
