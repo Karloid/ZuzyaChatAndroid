@@ -17,7 +17,7 @@ public class TestViewModel extends BaseViewModel {
         int colorInt = Color.argb(255, rnd.nextInt(256), rnd.nextInt(256), rnd.nextInt(256));
         color = BehaviorSubject.create(colorInt);
 
-        text = BehaviorSubject.create("LOL");
+        text = BehaviorSubject.create("...");
         Thread thread = new Thread(new Runnable() {
             @Override
             public void run() {
