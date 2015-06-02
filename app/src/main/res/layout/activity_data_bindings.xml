@@ -10,14 +10,19 @@
         android:layout_height="match_parent"
         android:paddingTop="40dp"
        >
-        <TextView android:layout_width="wrap_content"
+        <TextView
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:paddingLeft="@{user.paddingLeft}"
-
-            android:text='@{"FirstName: " + user.firstName + "; LeftPadding: " + user.paddingLeft}'/>
-        <TextView android:layout_width="wrap_content"
+            android:paddingBottom="@{user.paddingLeft}"
+            android:paddingTop="@{user.paddingLeft}"
+            android:background='@{Color.rgb(255 - user.paddingLeft/3,255 -  user.paddingLeft/2, 255 - user.paddingLeft/4)}'
+            android:text='@{"FirstName: " + user.firstName + "; Padding: " + user.paddingLeft}'/>
+        <TextView
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:paddingLeft="@{(user.paddingLeft / 3 ) * 4}"
-            android:text='@{"LastName: " + user.lastName + "; LeftPadding x 1.3: " + user.paddingLeft}'/>
+            android:background='@{Color.argb(255 - user.paddingLeft/1,255 - user.paddingLeft/2, 255 -  user.paddingLeft/4, 255 - user.paddingLeft/2)}'
+            android:text='@{"LastName: " + user.lastName + "; Padding x 1.3: " + user.paddingLeft}'/>
     </LinearLayout>
 </layout>
