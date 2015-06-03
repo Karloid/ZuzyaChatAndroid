@@ -29,17 +29,17 @@ public class User extends BaseObservable {
     public int getPaddingLeft() {
         return paddingLeft;
     }
-
+    @Bindable
     public void setFirstName(String firstName) {
         this.firstName = firstName;
         notifyPropertyChanged(BR.firstName);
     }
-
+    @Bindable
     public void setLastName(String lastName) {
         this.lastName = lastName;
         notifyPropertyChanged(BR.lastName);
     }
-
+    @Bindable
     public void setPaddingLeft(int paddingLeft) {
         this.paddingLeft = paddingLeft;
         notifyPropertyChanged(BR.paddingLeft);
